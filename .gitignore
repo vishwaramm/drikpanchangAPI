@@ -1,0 +1,55 @@
+# Python
+# Byte-compiled / optimized / compressed files and directories.
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.egg
+
+
+# Distribution / packaging.
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+
+
+# Virtual environment
+# venv/
+# .venv/
+env/
+# .env/
+# These are often named "venv" or ".venv". You can uncomment one of these lines if you use a standard name.
+# Otherwise, add the specific name of your environment directory here.
+# Example: my_env_name/
+
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+
+# Misc
+.pytest_cache/
+.ruff_cache/
+*.gitmodules
+
+
+# Specific to your project (add as needed)
+# secrets.ini
+# config.json
+# *.log
+# *.csv
