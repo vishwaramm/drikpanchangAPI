@@ -38,6 +38,60 @@ Server starts on:
 
 - `http://127.0.0.1:5000`
 
+## Docker (Fedora, From Scratch)
+
+### 1. Install Docker Engine
+
+```bash
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+### 2. Enable and start Docker
+
+```bash
+sudo systemctl enable --now docker
+sudo systemctl status docker
+```
+
+### 3. Optional: run Docker without sudo
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+### 4. Build image
+
+From project root:
+
+```bash
+docker build -t drikpanchang-api:latest .
+```
+
+### 5. Run container
+
+```bash
+docker run --rm -p 5000:5000 --name drikpanchang-api drikpanchang-api:latest
+```
+
+API will be available at:
+
+- `http://127.0.0.1:5000`
+
+### 6. Run with Docker Compose (optional)
+
+```bash
+docker compose up --build
+```
+
+Stop:
+
+```bash
+docker compose down
+```
+
 ## API Endpoints
 
 ### 1. Health

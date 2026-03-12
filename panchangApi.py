@@ -9,8 +9,8 @@ DRIK_PANCHANGA_PATH = Path(__file__).resolve().parent / "drik-panchanga"
 if str(DRIK_PANCHANGA_PATH) not in sys.path:
     sys.path.append(str(DRIK_PANCHANGA_PATH))
 
-import panchanga
-import swisseph as swe
+panchanga = None
+swe = None
 
 NAKSHATRA_NAMES = [
     "Ashwini",
@@ -73,12 +73,33 @@ NAKSHATRA_PADA_SYLLABLES = {
 }
 
 CITIES_CSV_PATH = DRIK_PANCHANGA_PATH / "cities.csv"
+ISO3166_TAB_PATH = Path("/usr/share/zoneinfo/iso3166.tab")
+ZONE_TAB_PATH = Path("/usr/share/zoneinfo/zone.tab")
 _CITIES_INDEX: Dict[str, List[Dict[str, Any]]] = {}
+_COUNTRY_CITY_INDEX: Dict[str, List[Dict[str, Any]]] = {}
+_TIMEZONE_COUNTRY_INDEX: Dict[str, str] = {}
 
 CONTEXT_TOKEN_ALIASES = {
     "trinidad": ["port_of_spain", "port", "spain", "trinidad", "tobago"],
     "tobago": ["port_of_spain", "port", "spain", "trinidad", "tobago"],
 }
+
+
+def _require_astrology_dependencies():
+    global panchanga, swe
+    if panchanga is not None and swe is not None:
+        return
+
+    try:
+        import panchanga as loaded_panchanga
+        import swisseph as loaded_swe
+    except ModuleNotFoundError as exc:
+        raise ValueError(
+            "astrology dependencies are not installed on the drikpanchangAPI server"
+        ) from exc
+
+    panchanga = loaded_panchanga
+    swe = loaded_swe
 
 
 def parse_date(value: str) -> datetime.date:
@@ -130,32 +151,71 @@ def _normalize_city_name(name: str) -> str:
     return " ".join(name.strip().lower().replace("-", " ").split())
 
 
+def _load_timezone_country_index():
+    global _TIMEZONE_COUNTRY_INDEX
+    if _TIMEZONE_COUNTRY_INDEX:
+        return
+
+    if not ISO3166_TAB_PATH.exists() or not ZONE_TAB_PATH.exists():
+        raise ValueError("zoneinfo country mapping files not found")
+
+    country_names: Dict[str, str] = {}
+    with ISO3166_TAB_PATH.open("r", encoding="utf-8") as country_file:
+        for line in country_file:
+            if not line.strip() or line.startswith("#"):
+                continue
+            code, name = line.strip().split("	", 1)
+            country_names[code] = name
+
+    timezone_country_index: Dict[str, str] = {}
+    with ZONE_TAB_PATH.open("r", encoding="utf-8") as zone_file:
+        for line in zone_file:
+            if not line.strip() or line.startswith("#"):
+                continue
+            parts = line.strip().split("	")
+            if len(parts) < 3:
+                continue
+            country_code, _coordinates, timezone_name = parts[:3]
+            timezone_country_index[timezone_name] = country_names.get(country_code, country_code)
+
+    _TIMEZONE_COUNTRY_INDEX = timezone_country_index
+
+
+def _country_from_timezone(timezone_name: str) -> str:
+    _load_timezone_country_index()
+    return _TIMEZONE_COUNTRY_INDEX.get(timezone_name, timezone_name.replace("_", " "))
+
+
 def _load_cities_index():
-    global _CITIES_INDEX
-    if _CITIES_INDEX:
+    global _CITIES_INDEX, _COUNTRY_CITY_INDEX
+    if _CITIES_INDEX and _COUNTRY_CITY_INDEX:
         return
 
     if not CITIES_CSV_PATH.exists():
         raise ValueError("cities.csv not found in drik-panchanga folder")
 
     index: Dict[str, List[Dict[str, Any]]] = {}
+    country_index: Dict[str, List[Dict[str, Any]]] = {}
     with CITIES_CSV_PATH.open("r", encoding="utf-8") as city_file:
         reader = csv.reader(city_file, delimiter=":")
         for row in reader:
             if len(row) != 4:
                 continue
             city_name, latitude, longitude, timezone_name = row
+            city_entry = {
+                "city": city_name,
+                "latitude": float(latitude),
+                "longitude": float(longitude),
+                "timezone_name": timezone_name,
+                "country": _country_from_timezone(timezone_name),
+            }
             key = _normalize_city_name(city_name)
-            index.setdefault(key, []).append(
-                {
-                    "city": city_name,
-                    "latitude": float(latitude),
-                    "longitude": float(longitude),
-                    "timezone_name": timezone_name,
-                }
-            )
+            index.setdefault(key, []).append(city_entry)
+            country_key = _normalize_city_name(city_entry["country"])
+            country_index.setdefault(country_key, []).append(city_entry)
 
     _CITIES_INDEX = index
+    _COUNTRY_CITY_INDEX = country_index
 
 
 def _timezone_offset_hours_for_datetime(
@@ -203,6 +263,7 @@ def _resolve_city_entry(city: str, state: str = "", country: str = ""):
         sample = [
             {
                 "city": entry["city"],
+                "country": entry.get("country"),
                 "timezone_name": entry["timezone_name"],
                 "latitude": entry["latitude"],
                 "longitude": entry["longitude"],
@@ -242,6 +303,7 @@ def _resolve_city_entry(city: str, state: str = "", country: str = ""):
 
 
 def _jd_from_birth_datetime_payload(payload: Dict[str, Any]):
+    _require_astrology_dependencies()
     birth_datetime = parse_datetime(str(payload.get("birth_datetime", "")))
 
     if birth_datetime.tzinfo is None:
@@ -264,6 +326,7 @@ def _jd_from_birth_datetime_payload(payload: Dict[str, Any]):
 
 
 def _jd_from_payload(payload: Dict[str, Any]) -> float:
+    _require_astrology_dependencies()
     if "jd" in payload and payload["jd"] is not None:
         return float(payload["jd"])
 
@@ -272,6 +335,7 @@ def _jd_from_payload(payload: Dict[str, Any]) -> float:
 
 
 def _place_from_payload(payload: Dict[str, Any]):
+    _require_astrology_dependencies()
     required = ("latitude", "longitude", "timezone")
     missing = [field for field in required if payload.get(field) is None]
     if missing:
@@ -412,7 +476,41 @@ def list_drik_functions():
     ]
 
 
+def get_cities(country: str = ""):
+    _load_cities_index()
+
+    if country:
+        entries = _COUNTRY_CITY_INDEX.get(_normalize_city_name(country), [])
+    else:
+        entries = []
+
+    unique_countries = sorted(
+        {
+            entry["country"]
+            for city_entries in _CITIES_INDEX.values()
+            for entry in city_entries
+        }
+    )
+    unique_cities = sorted(
+        {
+            (entry["country"], entry["city"], entry["timezone_name"]): {
+                "city": entry["city"],
+                "country": entry["country"],
+                "timezone_name": entry["timezone_name"],
+            }
+            for entry in entries
+        }.values(),
+        key=lambda item: (item["city"].lower(), item["country"].lower(), item["timezone_name"].lower()),
+    )
+
+    return {
+        "countries": unique_countries,
+        "cities": unique_cities,
+    }
+
+
 def get_name_letters(payload: Dict[str, Any]):
+    _require_astrology_dependencies()
     jd, timezone = _jd_from_birth_datetime_payload(payload)
 
     latitude = payload.get("latitude")
