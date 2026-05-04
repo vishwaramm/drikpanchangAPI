@@ -362,6 +362,7 @@ def _int_field(payload: Dict[str, Any], field: str) -> int:
 
 
 def calculate_panchang(date, latitude, longitude, timezone):
+    _require_astrology_dependencies()
     jd = panchanga.gregorian_to_jd(date)
     place = panchanga.Place(latitude=latitude, longitude=longitude, timezone=timezone)
 
@@ -463,6 +464,7 @@ FUNCTION_INPUTS = {
 
 
 def call_drik_function(function_name: str, payload: Dict[str, Any]):
+    _require_astrology_dependencies()
     function_name = function_name.strip()
     if function_name not in FUNCTION_HANDLERS:
         raise KeyError(f"unsupported function '{function_name}'")

@@ -1,0 +1,760 @@
+{
+  "birth": {
+    "payload": {
+      "birth_datetime": "1990-01-01T06:30:00",
+      "city": "Delhi"
+    },
+    "expected": {
+      "input": {
+        "birth_datetime_utc": "1990-01-01T01:00:00+00:00",
+        "timezone_name": "Asia/Kolkata"
+      },
+      "location": {
+        "city": "Delhi"
+      },
+      "ascendant": {
+        "sign": "Sagittarius"
+      },
+      "summary": {
+        "planet_count": 9
+      },
+      "sun": {
+        "sign": "Sagittarius",
+        "house": 1
+      },
+      "moon": {
+        "sign": "Aquarius",
+        "house": 3
+      },
+      "rahu": {
+        "sign": "Capricorn",
+        "house": 2
+      }
+    }
+  },
+  "birth_timezone": {
+    "payload": {
+      "birth_date": "1990-01-01",
+      "birth_time": "06:30:00",
+      "timezone_name": "Asia/Kolkata",
+      "latitude": 28.6139,
+      "longitude": 77.209,
+      "house_system": "whole_sign"
+    },
+    "expected": {
+      "input": {
+        "birth_datetime": "1990-01-01T06:30:00+05:30",
+        "birth_datetime_utc": "1990-01-01T01:00:00+00:00",
+        "timezone_name": "Asia/Kolkata",
+        "house_system": "whole_sign"
+      },
+      "location": {
+        "latitude": 28.6139,
+        "longitude": 77.209,
+        "timezone_name": "Asia/Kolkata"
+      },
+      "ascendant": {
+        "sign": "Sagittarius"
+      },
+      "summary": {
+        "location_based": true
+      },
+      "sun": {
+        "sign": "Sagittarius"
+      }
+    }
+  },
+  "dasha": {
+    "payload": {
+      "birth_datetime": "1990-01-01T06:30:00",
+      "city": "Delhi",
+      "max_depth": 2
+    },
+    "expected": {
+      "nakshatra": "Dhanishta",
+      "mahadasha_lord_at_birth": "Mars",
+      "current_period": {
+        "lord": "Mars",
+        "level_name": "mahadasha"
+      },
+      "levels": {
+        "antardasha": "included",
+        "mahadasha": "included",
+        "pratyantardasha": "included",
+        "sookshma": "excluded",
+        "prana": "excluded"
+      }
+    }
+  },
+  "dasha_edge": {
+    "payload": {
+      "birth_datetime": "2024-01-01T00:00:00",
+      "timezone": 5.5,
+      "max_depth": 4
+    },
+    "chart": {
+      "planets": {
+        "Moon": {
+          "sidereal_longitude": 359.9
+        }
+      }
+    },
+    "expected": {
+      "nakshatra": "Revati",
+      "mahadasha_lord_at_birth": "Mercury",
+      "dasha_balance": {
+        "elapsed_years": 16.872,
+        "remaining_years": 0.128
+      },
+      "current_period": {
+        "lord": "Mercury",
+        "level_name": "mahadasha"
+      },
+      "levels": {
+        "antardasha": "included",
+        "mahadasha": "included",
+        "pratyantardasha": "included",
+        "sookshma": "included",
+        "prana": "included"
+      }
+    }
+  },
+  "dasha_boundary": {
+    "payload": {
+      "birth_datetime": "2024-01-01T00:00:00",
+      "timezone": 5.5,
+      "max_depth": 3
+    },
+    "chart": {
+      "planets": {
+        "Moon": {
+          "sidereal_longitude": 0.0
+        }
+      }
+    },
+    "expected": {
+      "nakshatra": "Ashwini",
+      "mahadasha_lord_at_birth": "Ketu",
+      "dasha_balance": {
+        "elapsed_years": 0.0,
+        "remaining_years": 7.0
+      },
+      "current_period": {
+        "lord": "Ketu",
+        "level_name": "mahadasha"
+      },
+      "levels": {
+        "antardasha": "included",
+        "mahadasha": "included",
+        "pratyantardasha": "included",
+        "sookshma": "included",
+        "prana": "excluded"
+      }
+    }
+  },
+  "divisional": {
+    "chart": {
+      "planets": {
+        "Sun": {
+          "sidereal_longitude": 2.0
+        },
+        "Moon": {
+          "sidereal_longitude": 45.0
+        },
+        "Mars": {
+          "sidereal_longitude": 123.0
+        },
+        "Mercury": {
+          "sidereal_longitude": 278.0
+        }
+      },
+      "ascendant": {
+        "longitude": 123.0,
+        "sign": "Leo"
+      }
+    },
+    "expected": {
+      "source": {
+        "chart_type": "sidereal",
+        "reference_sign": "Leo"
+      },
+      "D1": {
+        "name": "D1",
+        "placements": {
+          "Sun": {
+            "sign": "Aries"
+          },
+          "Moon": {
+            "sign": "Taurus"
+          }
+        }
+      },
+      "D9": {
+        "name": "D9",
+        "ascendant": {
+          "varga_sign": "Aries",
+          "sign": "Leo"
+        }
+      },
+      "D10": {
+        "name": "D10",
+        "placements": {
+          "Mercury": {
+            "varga_sign": "Pisces"
+          }
+        }
+      },
+      "D30": {
+        "name": "D30",
+        "placements": {
+          "Moon": {
+            "segment_lord": "Jupiter"
+          }
+        }
+      }
+    }
+  },
+  "divisional_extended": {
+    "chart": {
+      "planets": {
+        "Sun": {
+          "sidereal_longitude": 12.0
+        },
+        "Moon": {
+          "sidereal_longitude": 101.0
+        },
+        "Mars": {
+          "sidereal_longitude": 217.0
+        },
+        "Mercury": {
+          "sidereal_longitude": 289.0
+        },
+        "Jupiter": {
+          "sidereal_longitude": 333.0
+        },
+        "Venus": {
+          "sidereal_longitude": 44.0
+        },
+        "Saturn": {
+          "sidereal_longitude": 155.0
+        }
+      },
+      "ascendant": {
+        "longitude": 44.0,
+        "sign": "Taurus"
+      }
+    },
+    "expected": {
+      "source": {
+        "chart_type": "sidereal",
+        "reference_sign": "Taurus"
+      },
+      "D2": {
+        "name": "D2",
+        "ascendant": {
+          "varga_sign": "Leo"
+        }
+      },
+      "D7": {
+        "name": "D7",
+        "placements": {
+          "Moon": {
+            "varga_sign": "Virgo"
+          },
+          "Jupiter": {
+            "varga_sign": "Gemini"
+          }
+        }
+      },
+      "D20": {
+        "name": "D20",
+        "placements": {
+          "Saturn": {
+            "varga_sign": "Pisces"
+          }
+        }
+      },
+      "D60": {
+        "name": "D60",
+        "placements": {
+          "Venus": {
+            "segment_index": 8
+          }
+        }
+      }
+    }
+  },
+  "divisional_secondary": {
+    "chart": {
+      "planets": {
+        "Sun": {
+          "sidereal_longitude": 12.0
+        },
+        "Moon": {
+          "sidereal_longitude": 101.0
+        },
+        "Mars": {
+          "sidereal_longitude": 217.0
+        },
+        "Mercury": {
+          "sidereal_longitude": 289.0
+        },
+        "Jupiter": {
+          "sidereal_longitude": 333.0
+        },
+        "Venus": {
+          "sidereal_longitude": 44.0
+        },
+        "Saturn": {
+          "sidereal_longitude": 155.0
+        }
+      },
+      "ascendant": {
+        "longitude": 44.0,
+        "sign": "Taurus"
+      }
+    },
+    "expected": {
+      "source": {
+        "chart_type": "sidereal",
+        "reference_sign": "Taurus"
+      },
+      "D2": {
+        "name": "D2",
+        "ascendant": {
+          "varga_sign": "Leo"
+        },
+        "placements": {
+          "Sun": {
+            "varga_sign": "Cancer"
+          },
+          "Venus": {
+            "varga_sign": "Leo"
+          }
+        }
+      },
+      "D7": {
+        "name": "D7",
+        "placements": {
+          "Moon": {
+            "varga_sign": "Virgo"
+          },
+          "Jupiter": {
+            "varga_sign": "Gemini"
+          }
+        }
+      }
+    }
+  },
+  "divisional_boundary": {
+    "chart": {
+      "planets": {
+        "Sun": {
+          "sidereal_longitude": 29.999
+        },
+        "Moon": {
+          "sidereal_longitude": 15.0
+        },
+        "Mars": {
+          "sidereal_longitude": 59.999
+        },
+        "Mercury": {
+          "sidereal_longitude": 119.999
+        },
+        "Jupiter": {
+          "sidereal_longitude": 180.0
+        },
+        "Venus": {
+          "sidereal_longitude": 240.0
+        },
+        "Saturn": {
+          "sidereal_longitude": 359.999
+        }
+      },
+      "ascendant": {
+        "longitude": 29.999,
+        "sign": "Aries"
+      }
+    },
+    "expected": {
+      "source": {
+        "chart_type": "sidereal",
+        "reference_sign": "Aries"
+      },
+      "D2": {
+        "name": "D2",
+        "ascendant": {
+          "varga_sign": "Leo"
+        }
+      },
+      "D9": {
+        "name": "D9",
+        "ascendant": {
+          "varga_sign": "Sagittarius"
+        }
+      },
+      "D30": {
+        "name": "D30",
+        "placements": {
+          "Sun": {
+            "segment_lord": "Venus"
+          },
+          "Moon": {
+            "segment_lord": "Jupiter"
+          },
+          "Saturn": {
+            "segment_lord": "Mars"
+          }
+        }
+      },
+      "D60": {
+        "name": "D60",
+        "placements": {
+          "Saturn": {
+            "segment_index": 60
+          }
+        }
+      }
+    }
+  },
+  "transit": {
+    "payload": {
+      "birth_datetime": "1990-01-01T06:30:00",
+      "city": "Delhi",
+      "transit_datetime": "2025-01-23T00:00:00",
+      "timezone": 5.5,
+      "forecast_days": 2
+    },
+    "expected": {
+      "forecast_len": 2,
+      "aspect_hit_count": 13,
+      "first_forecast": {
+        "date": "2025-01-24",
+        "score": 30.0,
+        "conjunction_count": 2
+      }
+    }
+  },
+  "muhurta": {
+    "payload": {
+      "date": "2025-01-23",
+      "latitude": 12.972,
+      "longitude": 77.594,
+      "timezone": 5.5,
+      "activity_type": "career"
+    },
+    "expected": {
+      "summary": {
+        "activity_type": "career",
+        "profile": "career",
+        "best_score": 9
+      },
+      "first_result": {
+        "weekday": "Guruvāra",
+        "score": {
+          "total": 9
+        },
+        "windows": {
+          "rahu_kalam": {
+            "start": "13:57"
+          }
+        }
+      }
+    }
+  },
+  "muhurta_strict": {
+    "payload": {
+      "date": "2025-01-23",
+      "latitude": 12.972,
+      "longitude": 77.594,
+      "timezone": 5.5,
+      "activity_type": "career",
+      "minimum_score": 23
+    },
+    "expected": {
+      "summary": {
+        "count": 0,
+        "best_score": null,
+        "activity_type": "career"
+      },
+      "results": []
+    }
+  },
+  "rule_cancellation": {
+    "payload": {
+      "planets": {
+        "Moon": {
+          "sidereal_longitude": 80.0,
+          "sign_index": 0,
+          "house": 1,
+          "dignity": "own"
+        },
+        "Mars": {
+          "sidereal_longitude": 85.0,
+          "sign_index": 0,
+          "house": 1,
+          "dignity": "debilitated",
+          "combustion": {
+            "is_combust": true
+          }
+        },
+        "Jupiter": {
+          "sidereal_longitude": 110.0,
+          "sign_index": 3,
+          "house": 4,
+          "dignity": "exalted"
+        },
+        "Sun": {
+          "sidereal_longitude": 70.0,
+          "sign_index": 2,
+          "house": 3
+        },
+        "Mercury": {
+          "sidereal_longitude": 100.0,
+          "sign_index": 3,
+          "house": 4
+        },
+        "Venus": {
+          "sidereal_longitude": 120.0,
+          "sign_index": 4,
+          "house": 5
+        },
+        "Saturn": {
+          "sidereal_longitude": 130.0,
+          "sign_index": 4,
+          "house": 5
+        },
+        "Rahu": {
+          "sidereal_longitude": 60.0,
+          "sign_index": 2,
+          "house": 3
+        },
+        "Ketu": {
+          "sidereal_longitude": 240.0,
+          "sign_index": 8,
+          "house": 9
+        }
+      },
+      "ascendant": {
+        "sign": "Aries",
+        "sign_index": 0
+      }
+    },
+    "expected": {
+      "suppressed": [
+        "chandra_mangala_yoga",
+        "kalasarpa_yoga"
+      ],
+      "summary": {
+        "match_count": 8,
+        "suppressed_count": 2
+      },
+      "first_match": {
+        "rule_id": "gajakesari_yoga",
+        "source": "drikpanchang/common classical practice",
+        "score": 8
+      }
+    }
+  },
+  "transit_windows": {
+    "payload": {
+      "birth_datetime": "1990-01-01T06:30:00",
+      "city": "Delhi",
+      "transit_datetime": "2025-01-23T00:00:00",
+      "timezone": 5.5,
+      "forecast_days": 1
+    },
+    "expected": {
+      "forecast_len": 1,
+      "first_forecast": {
+        "timed_windows_len": 2,
+        "dominant_themes": [
+          "action",
+          "authority",
+          "conflict",
+          "growth",
+          "home",
+          "identity"
+        ],
+        "first_window": {
+          "start": "2025-01-24T09:00:00+05:30",
+          "end": "2025-01-24T12:00:00+05:30",
+          "dominant_themes": [
+            "growth",
+            "home",
+            "mind",
+            "relationship",
+            "wisdom"
+          ]
+        }
+      }
+    }
+  },
+  "transit_event_boundary": {
+    "payload": {
+      "transit_datetime": "2025-01-23T00:00:00",
+      "timezone": 5.5,
+      "forecast_days": 1
+    },
+    "expected": {
+      "events_len": 4,
+      "first_event": {
+        "event_type": "ingress",
+        "approx_time": "2025-01-23T00:59:55.312500+05:30"
+      },
+      "forecast_first": {
+        "date": "2025-01-24",
+        "events_len": 4,
+        "first_event": {
+          "event_type": "ingress",
+          "approx_time": "2025-01-24T00:59:55.312500+05:30"
+        }
+      }
+    }
+  },
+  "compatibility_dosha": {
+    "boy_chart": {
+      "planets": {
+        "Moon": {
+          "sidereal_longitude": 80.0,
+          "sign_index": 0,
+          "degree_in_sign": 20.0,
+          "nakshatra_index": 4
+        },
+        "Mars": {
+          "sidereal_longitude": 5.0,
+          "sign_index": 0,
+          "house": 1,
+          "dignity": "own"
+        }
+      },
+      "ascendant": {
+        "sign_index": 0,
+        "sign": "Aries"
+      }
+    },
+    "girl_chart": {
+      "planets": {
+        "Moon": {
+          "sidereal_longitude": 110.0,
+          "sign_index": 3,
+          "degree_in_sign": 20.0,
+          "nakshatra_index": 16
+        },
+        "Mars": {
+          "sidereal_longitude": 155.0,
+          "sign_index": 5,
+          "house": 5,
+          "dignity": "neutral"
+        }
+      },
+      "ascendant": {
+        "sign_index": 3,
+        "sign": "Cancer"
+      }
+    },
+    "expected": {
+      "total_gunas": 22.0,
+      "grade": "very_good",
+      "bhakoot_favorable": true,
+      "nadi_favorable": false,
+      "doshas": {
+        "mangal": {
+          "boy": true,
+          "girl": false,
+          "concern": true
+        },
+        "nadi": {
+          "favorable": false,
+          "concern": true
+        }
+      },
+      "mitigations": [
+        {
+          "name": "mangal_mitigation",
+          "severity": "warning"
+        },
+        {
+          "name": "nadi_remediation",
+          "severity": "critical"
+        }
+      ]
+    }
+  },
+  "compatibility": {
+    "payload": {
+      "boy_chart": {
+        "planets": {
+          "Moon": {
+            "sidereal_longitude": 0.0,
+            "sign_index": 0,
+            "degree_in_sign": 0.0,
+            "nakshatra_index": 0
+          }
+        }
+      },
+      "girl_chart": {
+        "planets": {
+          "Moon": {
+            "sidereal_longitude": 30.0,
+            "sign_index": 1,
+            "degree_in_sign": 0.0,
+            "nakshatra_index": 1
+          }
+        }
+      }
+    },
+    "expected": {
+      "total_gunas": 28.5,
+      "grade": "very_good",
+      "bhakoot_favorable": true,
+      "nadi_favorable": true,
+      "first_kuta": {
+        "name": "Varna",
+        "score": 1.0
+      }
+    }
+  },
+  "meta": {
+    "payload": {
+      "version": "v1"
+    },
+    "expected": {
+      "api_version": "v1",
+      "selected_service_version": "v1",
+      "available_rule_packs": [
+        "classical_core",
+        "default_traditional",
+        "extended_interpretive",
+        "life_themes",
+        "strict_classical"
+      ],
+      "supported_vargas": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D7",
+        "D9",
+        "D10",
+        "D12",
+        "D16",
+        "D20",
+        "D24",
+        "D30",
+        "D60"
+      ],
+      "supported_endpoints": [
+        "/birth-chart",
+        "/dashas",
+        "/divisional-charts",
+        "/transits",
+        "/interpretation",
+        "/compatibility",
+        "/muhurta",
+        "/panchang",
+        "/meta"
+      ]
+    }
+  }
+}
