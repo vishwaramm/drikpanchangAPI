@@ -99,10 +99,10 @@ API will be available at:
 
 ### 6. Run with Docker Compose (optional)
 
-The Compose service listens on container port `5050` and binds only to
-`127.0.0.1:5000` on the host so the Vishwaram API can reach it without
-exposing the Panchang service directly to the internet. It also uses a
-restart policy and a health check so it returns after a host reboot.
+The Compose service listens on container port `5050` and publishes host port
+`5000`, which is the existing Docker-to-host endpoint used by the Vishwaram
+API (`host.docker.internal:5000`). It uses a restart policy and a health check
+so it returns after a host reboot.
 
 ```bash
 docker compose down
